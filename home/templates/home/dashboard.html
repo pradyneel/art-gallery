@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Gallery</title>
+
+    <!-- Link stylesheet -->
+    <link rel="stylesheet" href="{%static 'home/style.css' %}">
+</head>
+<body>
+        <!-- Header -->
+        <header>
+            <h1>ART Gallery</h1>
+        </header>
+        <!-- End of Header -->
+
+        <main style="display:flex;">
+            <div style="display: inline-block; margin: 10px; justify-content: center; align-items: center;">
+                <div class = "info">
+                    <a href="./generate" style="font-size: 24px;">Create a Landing Page</a>
+                </div>
+    
+                <div class="info">
+                    <a href="./qrcodes" style="font-size: 24px;">Generated QR codes</a>
+                </div>
+            </div>
+            
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <p>Developed by Pradeep N</p>
+        </footer>
+        <!-- End of footer -->
+
+    <style>
+        .content{
+            background: url('{% static 'home/bg1.jpg' %}') no-repeat center center fixed;
+            -webkit-background-size:cover;
+            -moz--background-size:cover;
+            -o--background-size:cover;
+            background-size: cover;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Gallery</title>
+
+    <!-- Link stlyesheet -->
+    <link rel="stylesheet" href="{%static 'home/style.css' %}">
+
+    <script src="{%static 'home/deleteQR.js' %}"></script>
+
+    <!-- Link fontawesome.com for icons -->
+    <script src="https://kit.fontawesome.com/c730d67fc9.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>ART Gallery</h1>
+    </header>
+    <!-- End of header -->
+
+    <!-- Main Content -->
+    <main> 
+        <h3 style="text-align: center; padding: 10px;">Generated QR codes</h3> <br>
+
+        <div style="display: inline-block; margin: 10px;">
+            <div class="qrcode-container">
+                {% for QRcode in QRcodes %}
+
+                <div class="QRDisplay" style="background-color: #FCF8F8;">
+                    <div class="qrcode" style="background-color: #FCF8F8;">
+                        <figure>
+                            <img src="{{ QRcode.image_url }}" style="padding: 10px;" width="150" height="177.94">
+                            <figcaption><b>{{ QRcode.image_name }}</b></figcaption>
+                        </figure>
+    
+                        <div class="edit">
+                            <button style='font-size:24px; margin-right: 5px;' onclick="deleteQR({{ QRcode.image_id }})"><i class='far fa-trash-alt' style="color: red;"></i></button>
+                            <button style='font-size:24px; margin-right: 5px;'><i class='fas fa-edit' style="color:#2595FF;"></i></button>
+                        </div> 
+                    </div>
+
+                    <iframe src="{{ QRcode.url }}" frameborder="0" style="height: 275px;width:300px; padding-right: 5px;"></iframe>
+                </div>
+                
+
+                
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer>
+        <p>Developed by Pradeep N</p>
+    </footer>
+    <!-- End of Footer -->
+
+
+    <!-- <script>
+        function deleteQR(image_id){
+            alert(image_id);
+
+            var myHeaders = new Headers();
+            myHeaders.append("Authorization", "Token bd2149fd3ad6748f72ebae26c7ceed035af67084");
+
+            var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            redirect: 'follow'
+            };
+
+            fetch("https://api.beaconstac.com/api/2.0/qrcodes/53185/", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+        }
+    </script> -->
+</body>
+</html>

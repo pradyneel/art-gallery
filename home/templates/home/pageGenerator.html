@@ -1,0 +1,106 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Gallery</title>
+
+    <!-- Link stlyesheet -->
+    <link rel="stylesheet" href="{%static 'home/style.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>ART Gallery</h1>
+    </header>
+    <!-- End of header -->
+
+    <main> 
+        <h3 style="text-align: center; padding: 10px;">Fill the form to Generate Landing Page</h3> <br>
+        <!-- Form -->
+
+        <div class="forms">
+            <form method="POST" action = "/generate/" enctype="multipart/form-data" style="padding: 10px;">
+                {% csrf_token %}
+
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><label for="title"><b>Title</b></label></td>
+                            <td><b> : </b></td>
+                            <td><input type="text" name="title" id="title" placeholder="Enter title" required></td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="image"><b>Upload Image</b></label></td> 
+                            <td><b> : </b></td>
+                            <td><input type="file" name="image" id="image" required></td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="artist"><b>Artist</b></label></td>
+                            <td><b> : </b></td>
+                            <td><input type="text" name="artist" id="artist" placeholder="Enter name of the artist" required> </td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="location"><b>Location</b></label></td>
+                            <td><b> : </b></td>
+                            <td><input type="text" name="location" id="location" placeholder="Enter Location" required></td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="created"><b>Created</b></label></td>
+                            <td><b> : </b></td>
+                            <td><input type="text" name="created" id="created" placeholder="Enter year of creation" required></td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="dimension"><b>Dimension</b></label></td>
+                            <td><b> : </b></td>
+                            <td><input type="text" name="dimension" id="dimension" placeholder="Enter dimension" required></td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="medium"><b>Medium</b></label> </td>
+                            <td><b> : </b></td>
+                            <td><input type="text" name="medium" id="medium" placeholder="Enter medium" required></td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="summary"><b>Summary</b></label></td>
+                            <td><b> : </b></td>
+                            <td><textarea id="summary" name="summary" placeholder="Write a summary about the art" rows="8" required></textarea></td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="links"><b>Reference Link</b></label></td>
+                            <td><b> : </b></td>
+                            <td><input type="url" id="links" name="url" placeholder="Enter a link for further reference" required></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><button type="submit" style="padding: 5px;">Create Landing Page </button> </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                
+            </form>
+        </div>
+            
+        <!-- End of Form -->
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Developed by Pradeep N</p>
+    </footer>
+    <!-- End of Footer -->
+</body>
+</html>
