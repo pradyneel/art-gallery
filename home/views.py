@@ -30,21 +30,21 @@ def GenerateQRcode(markdown_card_id, name):
     },
     "location_enabled": False,
     "attributes":{
-        "color": "#2595ff",
-        "colorDark":"#2595ff",
+        "color": "#f10e0e",
+        "colorDark":"#f10e0e",
         "margin":80,
         "isVCard": False,
         "frameText": "ART GALLERY",
-        "logoImage": "https://d1bqobzsowu5wu.cloudfront.net/15406/36caec11f02d460aad0604fa26799c50",
+        "logoImage": "https://artgallery.blob.core.windows.net/artgallery/146-removebg-preview.png",
         "logoScale":0.1992,
-        "frameColor": "#2595FF",
-        "frameStyle":"banner-bottom",
+        "frameColor": "#DB4D4D",
+        "frameStyle":"box-bottom",
         "logoMargin":10,
-        "dataPattern":"square",
+        "dataPattern":"circle",
         "eyeBallShape":"circle",
         "gradientType": "none",
-        "eyeFrameColor": "#2595FF",
-        "eyeFrameShape": "rounded"
+        "eyeFrameColor": "#000000",
+        "eyeFrameShape": "circle"
     }
     }
 
@@ -104,10 +104,11 @@ def pageGenerator(request):
 
         # Once Markdown is created "Generating QR code for the Markdown Page"
         GenerateQRcode(markdown_card_id, title)
-        return redirect("/")
+        return redirect("/qrcodes/")
 
     else:
         return render(request, "home/pageGenerator.html")
+
 
 # Get QRCode image URL
 def getQRcode_url(images_id):
@@ -150,17 +151,20 @@ def getAllQRcodeId():
 
     ids = []
     urls = []
+    markdown_ids = []
 
     for dict in dictResponse['results']:
         #  To get ID of only Active QR codes
         if(dict['state'] == 'A'):
             ids.append(dict['id'])
             urls.append(dict['url'])
+            markdown_ids.append(dict["campaign"]["markdown_card"])
             # print(dict['id'],dict['state'])
     
     dict = {
         "image_id": ids,
-        "urls": urls
+        "urls": urls,
+        "markdown_ids": markdown_ids
     }
     return dict
 
@@ -170,16 +174,25 @@ def QRcodes(request):
     image_dict = getAllQRcodeId()
     images_info = getQRcode_url(image_dict["image_id"])
 
-
     for i, image_info in enumerate(images_info):
         image_info["url"] = image_dict["urls"][i]
+        image_info["markdown_id"] = image_dict["markdown_ids"][i]
         
-
     context = {
         "QRcodes": images_info
     }
     
     return render(request, "home/QRcodes.html", context=context)
+
+
+# View all Generated Landing Pages
+def landPage(request):
+    image_dict = getAllQRcodeId()
+
+    context = {
+        "markdowns": image_dict["urls"]
+    }
+    return render(request, "home/landingPages.html", context = context)
 
 
 # # Edit a QR codes

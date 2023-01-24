@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{%static 'home/style.css' %}">
 
     <script src="{%static 'home/deleteQR.js' %}"></script>
+    <script src="{%static 'home/updateQR.js' %}"></script>
+    <script src="{%static 'home/downloadQR.js' %}"></script>
 
     <!-- Link fontawesome.com for icons -->
     <script src="https://kit.fontawesome.com/c730d67fc9.js" crossorigin="anonymous"></script>
@@ -31,7 +33,7 @@
             <div class="qrcode-container">
                 {% for QRcode in QRcodes %}
 
-                <div class="QRDisplay" style="background-color: #FCF8F8;">
+                <div class="QRDisplay" style="background-color: #FCF8F8; display: inline-block;">
                     <div class="qrcode" style="background-color: #FCF8F8;">
                         <figure>
                             <img src="{{ QRcode.image_url }}" style="padding: 10px;" width="150" height="177.94">
@@ -40,14 +42,17 @@
     
                         <div class="edit">
                             <button style='font-size:24px; margin-right: 5px;' onclick="deleteQR({{ QRcode.image_id }})"><i class='far fa-trash-alt' style="color: red;"></i></button>
-                            <button style='font-size:24px; margin-right: 5px;'><i class='fas fa-edit' style="color:#2595FF;"></i></button>
+                            <button style='font-size:24px; margin-right: 5px;' onclick=""><i class='fas fa-edit' style="color:#2595FF;"></i></button>
+                            <!-- <button style='font-size:24px; margin-right: 5px;' onclick="downloadQR({{ QRcode.image_url }}, {{ QRcode.image_name}})"><i class="fa-solid fa-download"></i></button> -->
+                            <a href="{{ QRcode.image_url }}" download="{{ QRcode.image_name }}"><i class="fa-solid fa-download"></i></a>
                         </div> 
                     </div>
 
-                    <iframe src="{{ QRcode.url }}" frameborder="0" style="height: 275px;width:300px; padding-right: 5px;"></iframe>
+                    <!-- <div class="Preview">
+                        <h4>Preview</h4>
+                        <iframe src="{{ QRcode.url }}" frameborder="0" style="height: 200px;width:250px; padding-right: 5px;"></iframe>
+                    </div> -->
                 </div>
-                
-
                 
                 {% endfor %}
             </div>
@@ -60,26 +65,5 @@
         <p>Developed by Pradeep N</p>
     </footer>
     <!-- End of Footer -->
-
-
-    <!-- <script>
-        function deleteQR(image_id){
-            alert(image_id);
-
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Token bd2149fd3ad6748f72ebae26c7ceed035af67084");
-
-            var requestOptions = {
-            method: 'DELETE',
-            headers: myHeaders,
-            redirect: 'follow'
-            };
-
-            fetch("https://api.beaconstac.com/api/2.0/qrcodes/53185/", requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(result))
-                .catch(error => console.log('error', error));
-        }
-    </script> -->
 </body>
 </html>
