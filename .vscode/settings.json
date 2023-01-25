@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/7062b57d-bcfa-4d31-ac37-ddc5efe160ee/AppServices/subscriptions/7062b57d-bcfa-4d31-ac37-ddc5efe160ee/resourceGroups/artsgallery_group/providers/Microsoft.Web/sites/artsgallery",
+    "appService.deploySubpath": "."
+}
