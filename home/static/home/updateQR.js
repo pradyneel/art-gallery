@@ -19,7 +19,10 @@ function updateQR(image_id){
     };
 
     fetch("https://api.beaconstac.com/api/2.0/qrcodes/" + image_id.toString() + "/", requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+
+    alert(`QR code name updated to ${new_name}, the page will be reloaded`);
+    location.reload();
 }
