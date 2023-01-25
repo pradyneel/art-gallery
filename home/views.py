@@ -8,44 +8,32 @@ import requests
 import json
 import time
 import uuid
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 # Azure connection
-# connect_str = os.environ['AZURE_STORAGE_CONNECTION_STRING'] # retrieve the connection string from the environmental variable
-connect_str = "DefaultEndpointsProtocol=https;AccountName=artgallery;AccountKey=/pDidMtFw0i2pLRGE2WYBWamvP/cQbHD5uB1pIsl2SU3C1Gz3BQqM29bpeBY9a5i8wO8mCZtP6eU+ASt5nNH3A==;EndpointSuffix=core.windows.net"
-container_name = "artgallery" # container name in which images will be stored in the storage account
+connect_str = os.environ['CONNECTION_STRING'] # retrieve the connection string from the environmental variable
+# connect_str = "DefaultEndpointsProtocol=https;AccountName=artgallery;AccountKey=/pDidMtFw0i2pLRGE2WYBWamvP/cQbHD5uB1pIsl2SU3C1Gz3BQqM29bpeBY9a5i8wO8mCZtP6eU+ASt5nNH3A==;EndpointSuffix=core.windows.net"
+container_name = os.environ['CONTAINER_NAME'] # container name in which images will be stored in the storage account
 
 
 #Generate QRCode
-def GenerateQRcode(markdown_card_id, name):
+def GenerateQRcode(markdown_card_id, name, template_id):
     url = "https://api.beaconstac.com/api/2.0/qrcodes/"
  
     payload = {
     "name": name,
     "organization": 26724,
+    "template": template_id,
     "qr_type": 2,
     "campaign": {
         "content_type": 2,
         "markdown_card": markdown_card_id
     },
     "location_enabled": False,
-    "attributes":{
-        "color": "#f10e0e",
-        "colorDark":"#f10e0e",
-        "margin":80,
-        "isVCard": False,
-        "frameText": "ART GALLERY",
-        "logoImage": "https://artgallery.blob.core.windows.net/artgallery/146-removebg-preview.png",
-        "logoScale":0.1992,
-        "frameColor": "#DB4D4D",
-        "frameStyle":"box-bottom",
-        "logoMargin":10,
-        "dataPattern":"circle",
-        "eyeBallShape":"circle",
-        "gradientType": "none",
-        "eyeFrameColor": "#000000",
-        "eyeFrameShape": "circle"
-    }
     }
 
     headers = {
@@ -55,7 +43,7 @@ def GenerateQRcode(markdown_card_id, name):
 
     payload = json.dumps(payload)
     response = requests.request("POST", url, headers=headers, data=payload)
-    print(response.text)
+    # print(response.text)
 
 
 # Create your views here.
@@ -63,6 +51,27 @@ def GenerateQRcode(markdown_card_id, name):
 # Dashboard View
 def dashboard(request):
     return render(request, "home/dashboard.html")
+
+
+# Get template ids
+def getTemplateIds():
+    url = "https://api.beaconstac.com/api/2.0/qrtemplates/"
+
+    payload={}
+    headers = {
+    'Authorization': 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    dictResponse = json.loads(response.text)
+    # print(response.text)
+
+    ids = []
+
+    for dict in dictResponse['results']:
+        ids.append(dict['id'])
+
+    return ids
 
 
 # Create Landing Page
@@ -77,6 +86,9 @@ def pageGenerator(request):
         medium = request.POST.get('medium')
         summary = request.POST.get('summary')
         ref_url = request.POST.get('url')
+        template_id = request.POST.get('templateId')
+
+        # print(template_id)
 
         try:
             blob = BlobClient.from_connection_string(conn_str= connect_str, container_name= container_name, blob_name= image.name + str(uuid.uuid1()))
@@ -103,13 +115,44 @@ def pageGenerator(request):
         markdown_card_id = dictResponse["id"]
 
         # Once Markdown is created "Generating QR code for the Markdown Page"
-        GenerateQRcode(markdown_card_id, title)
+        GenerateQRcode(markdown_card_id, title, template_id)
         return redirect("/qrcodes/")
 
     else:
-        return render(request, "home/pageGenerator.html")
+        template_ids = getTemplateIds()
+        templates = []
 
+        for id in template_ids:
+            url = "https://api.beaconstac.com/api/2.0/qrtemplates/{template_id}/".format(template_id = id)
 
+            payload={}
+            headers = {
+            'Authorization': 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084'
+            }
+
+            response = requests.request("GET", url, headers=headers, data=payload)
+
+            dictResponse = json.loads(response.text)
+            template_url = dictResponse["thumbnail_url"]
+            template_name = dictResponse["name"]
+
+            template = {
+                "template_url" : template_url,
+                "template_name" : template_name,
+                "template_id" : id
+            }
+
+            templates.append(template)
+
+        context = {
+            "templates": templates
+        }
+
+        # print(context)
+
+        return render(request, "home/pageGenerator.html", context=context)
+
+   
 # Get QRCode image URL
 def getQRcode_url(images_id):
     payload={}
@@ -177,7 +220,8 @@ def QRcodes(request):
     for i, image_info in enumerate(images_info):
         image_info["url"] = image_dict["urls"][i]
         image_info["markdown_id"] = image_dict["markdown_ids"][i]
-        
+    
+
     context = {
         "QRcodes": images_info
     }
@@ -185,14 +229,14 @@ def QRcodes(request):
     return render(request, "home/QRcodes.html", context=context)
 
 
-# View all Generated Landing Pages
-def landPage(request):
-    image_dict = getAllQRcodeId()
+# # View all Generated Landing Pages
+# def landPage(request):
+#     image_dict = getAllQRcodeId()
 
-    context = {
-        "markdowns": image_dict["urls"]
-    }
-    return render(request, "home/landingPages.html", context = context)
+#     context = {
+#         "markdowns": image_dict["urls"]
+#     }
+#     return render(request, "home/landingPages.html", context = context)
 
 
 # # Edit a QR codes

@@ -41,10 +41,14 @@
                         </figure>
     
                         <div class="edit">
-                            <button style='font-size:24px; margin-right: 5px;' onclick="deleteQR({{ QRcode.image_id }})"><i class='far fa-trash-alt' style="color: red;"></i></button>
-                            <button style='font-size:24px; margin-right: 5px;' onclick=""><i class='fas fa-edit' style="color:#2595FF;"></i></button>
-                            <!-- <button style='font-size:24px; margin-right: 5px;' onclick="downloadQR({{ QRcode.image_url }}, {{ QRcode.image_name}})"><i class="fa-solid fa-download"></i></button> -->
-                            <a href="{{ QRcode.image_url }}" download="{{ QRcode.image_name }}"><i class="fa-solid fa-download"></i></a>
+                            <button style='font-size:24px; margin-right: 5px;' onclick="deleteQR({{ QRcode.image_id }})" title="Delete QR code"><i class='far fa-trash-alt' style="color: red;"></i></button>
+                            <button style='font-size:24px; margin-right: 5px;' onclick="updateQR({{ QRcode.image_id }})" title="Change name of QR code"><i class='fas fa-edit' style="color:#2595FF;"></i></button>
+                            <button style='font-size:24px; margin-right: 5px;' title="Download QR code">
+                                <a href="{{ QRcode.image_url }}" download="{{ QRcode.image_name }}">
+                                    <i class="fa-solid fa-download"></i>
+                                </a>
+                            </button>
+                            
                         </div> 
                     </div>
 

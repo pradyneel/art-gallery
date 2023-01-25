@@ -1,28 +1,20 @@
-function updateQR(image_id, markdown_card_id){
+function updateQR(image_id){
+
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Token bd2149fd3ad6748f72ebae26c7ceed035af67084");
+    myHeaders.append("content-type", "application/json")
 
-    let updated_name = prompt("Please enter updated name of the QRcode");
+    let new_name = prompt("Enter new name for QR code");
     
-    alert(updated_name);
-    // var raw = {
-    //     "name": updated_name,
-    //     "campaign": {
-    //         "content_type": 2,
-    //         "markdown_card": markdown_card_id
-    //     }
-    // };
 
-    // console.log(image_id);
+    let raw = JSON.stringify({
+        "name": new_name,
+    });
 
-
-    var raw = `{"\n    \"name\": \"${updated_name}\",\n    \"campaign\": {\n        \"content_type\": 2,\n        \"markdown_card\": ${markdown_card_id}\n    }\n}`;
-    console.log(raw);
-    
     var requestOptions = {
-        method: 'PUT',
-        headers: myHeaders,
-        body: JSON.stringify(raw),
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
     redirect: 'follow'
     };
 
@@ -30,7 +22,4 @@ function updateQR(image_id, markdown_card_id){
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));
-
-    alert("Name is changed and plage will be reloaded.");
-    // location.reload();
 }

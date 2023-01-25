@@ -14,5 +14,5 @@ function deleteQR(image_id){
         .catch(error => console.log('error', error));
 
     alert("QR code Deleted, page will be reloaded.");
-    // location.reload();
+    location.reload();
 }
