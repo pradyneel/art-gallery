@@ -1,0 +1,121 @@
+html, body{
+    height: 100%;
+    margin: 0;
+    min-height: 100%;
+    font-family: sans-serif;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    overflow: scroll;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+header, footer{
+    flex: none;
+    background-color: #FCF8F8;
+    width: 100%;
+}
+
+main{
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    flex: auto;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-image: url("https://cdn.pixabay.com/photo/2018/04/25/17/07/flower-3350053_960_720.jpg");
+    background-repeat: no-repeat, repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+body > * {
+    padding: 10px 15px;
+}
+
+.info{
+    margin: 10px;
+    padding: 50px;
+    border-radius: 5%;
+    background-color: rgba(252, 248, 248, 0.7);
+    width: 100%;
+    display: inline-block;
+    width: auto;
+    text-align: center;
+}
+
+table{
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+}
+
+th, td{
+    padding: 10px;
+}
+
+.qrcode-container{
+    justify-content: center;
+    align-items: center;
+}
+
+.qrcode{
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10%;
+    text-align: center;
+    padding: 5px;
+    margin: 10px;
+    display: inline-block;
+    width: auto;
+}
+
+input{
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5%;
+    box-shadow: none;
+    border-color: black;
+    border-width: thin;
+}
+
+textarea{
+    width: 100%;
+    border-color: black;
+    border-width: thin;
+}
+
+.forms{
+    background-color: rgba(165, 182, 204, 0.3);
+    display: inline-block;
+    padding: 10px;
+    border-radius: 5%;
+}
+
+.edit{
+    margin: 10px;
+}
+
+.QRDisplay{
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10%;
+    text-align: center;
+    padding: 5px;
+    margin: 10px;
+    /* width: auto; */
+}
+
+.Preview{
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10%;
+    text-align: center;
+    padding: 5px;
+    margin: 10px;
+    display: inline-block;
+    width: auto;
+}
