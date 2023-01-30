@@ -20,20 +20,56 @@ connect_str = os.environ['CONNECTION_STRING'] # retrieve the connection string f
 container_name = os.environ['CONTAINER_NAME'] # container name in which images will be stored in the storage account
 
 
+# Get Template Design
+def GetTemplateDesign(template_id):
+    url = "https://api.beaconstac.com/api/2.0/qrtemplates/{template_id}/".format(template_id = template_id)
+    payload={}
+    headers = {
+    'Authorization': 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    print(response.text)
+    dictResponse = json.loads(response.text)
+    return dictResponse
+
+
+
 #Generate QRCode
 def GenerateQRcode(markdown_card_id, name, template_id):
+
+    template_design = GetTemplateDesign(template_id)
+    print(template_design)
+
     url = "https://api.beaconstac.com/api/2.0/qrcodes/"
  
     payload = {
     "name": name,
     "organization": 26724,
-    "template": template_id,
+    # "template": template_id,
     "qr_type": 2,
     "campaign": {
         "content_type": 2,
         "markdown_card": markdown_card_id
     },
     "location_enabled": False,
+    "attributes":{
+        "colorDark":template_design["colorDark"],
+        "margin": template_design["margin"],
+        "isVCard":False,
+        "frameText": name.title(),
+        "logoImage":template_design["logoImage"],
+        "logoScale":template_design["logoScale"],
+        "frameColor":template_design["frameColor"],
+        "frameStyle":template_design["frameStyle"],
+        "logoMargin":template_design["logoMargin"],
+        "dataPattern": template_design["dataPattern"],
+        "eyeBallShape": template_design["eyeBallShape"],
+        "gradientType": template_design["gradientType"],
+        "eyeFrameColor": template_design["eyeFrameColor"],
+        "eyeFrameShape": template_design["eyeFrameShape"]
+    }
+
     }
 
     headers = {
@@ -87,8 +123,6 @@ def pageGenerator(request):
         summary = request.POST.get('summary')
         ref_url = request.POST.get('url')
         template_id = request.POST.get('templateId')
-
-        # print(template_id)
 
         try:
             blob = BlobClient.from_connection_string(conn_str= connect_str, container_name= container_name, blob_name= image.name + str(uuid.uuid1()))
