@@ -25,11 +25,10 @@ def GetTemplateDesign(template_id):
     url = "https://api.beaconstac.com/api/2.0/qrtemplates/{template_id}/".format(template_id = template_id)
     payload={}
     headers = {
-    'Authorization': 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084'
+    'Authorization': 'Token ' + os.environ['TOKEN']
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
-    print(response.text)
     dictResponse = json.loads(response.text)
     return dictResponse
 
@@ -39,14 +38,11 @@ def GetTemplateDesign(template_id):
 def GenerateQRcode(markdown_card_id, name, template_id):
 
     template_design = GetTemplateDesign(template_id)
-    print(template_design)
-
     url = "https://api.beaconstac.com/api/2.0/qrcodes/"
  
     payload = {
     "name": name,
     "organization": 26724,
-    # "template": template_id,
     "qr_type": 2,
     "campaign": {
         "content_type": 2,
@@ -58,6 +54,7 @@ def GenerateQRcode(markdown_card_id, name, template_id):
         "margin": template_design["margin"],
         "isVCard":False,
         "frameText": name.title(),
+        "logoBackground": template_design["logoBackground"],
         "logoImage":template_design["logoImage"],
         "logoScale":template_design["logoScale"],
         "frameColor":template_design["frameColor"],
@@ -67,19 +64,23 @@ def GenerateQRcode(markdown_card_id, name, template_id):
         "eyeBallShape": template_design["eyeBallShape"],
         "gradientType": template_design["gradientType"],
         "eyeFrameColor": template_design["eyeFrameColor"],
-        "eyeFrameShape": template_design["eyeFrameShape"]
+        "eyeFrameShape": template_design["eyeFrameShape"],
+        "frameTextColor": template_design["frameTextColor"],
+        "backgroundColor": template_design["backgroundColor"],
+        "eyeBallColor": template_design["eyeBallColor"],
+        "dotScale": template_design["dotScale"],
+        "colorLight": template_design["colorLight"]
     }
 
     }
 
     headers = {
-    'Authorization': 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084',
+    'Authorization': 'Token ' + os.environ['TOKEN'],
     'Content-Type': 'application/json'
     }
 
     payload = json.dumps(payload)
     response = requests.request("POST", url, headers=headers, data=payload)
-    # print(response.text)
 
 
 # Create your views here.
@@ -95,15 +96,13 @@ def getTemplateIds():
 
     payload={}
     headers = {
-    'Authorization': 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084'
+    'Authorization': 'Token '+ os.environ['TOKEN']
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
     dictResponse = json.loads(response.text)
-    # print(response.text)
 
     ids = []
-
     for dict in dictResponse['results']:
         ids.append(dict['id'])
 
@@ -140,7 +139,7 @@ def pageGenerator(request):
         }
 
         headers = {
-            "Authorization" : 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084'
+            "Authorization" : 'Token ' + os.environ['TOKEN']
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
@@ -161,7 +160,7 @@ def pageGenerator(request):
 
             payload={}
             headers = {
-            'Authorization': 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084'
+            'Authorization': 'Token ' + os.environ['TOKEN']
             }
 
             response = requests.request("GET", url, headers=headers, data=payload)
@@ -182,8 +181,6 @@ def pageGenerator(request):
             "templates": templates
         }
 
-        # print(context)
-
         return render(request, "home/pageGenerator.html", context=context)
 
    
@@ -191,7 +188,7 @@ def pageGenerator(request):
 def getQRcode_url(images_id):
     payload={}
     headers = {
-    'Authorization': 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084'
+    'Authorization': 'Token ' + os.environ['TOKEN']
     }
 
     images_info = []
@@ -220,7 +217,7 @@ def getAllQRcodeId():
 
     payload={}
     headers = {
-    'Authorization': 'Token bd2149fd3ad6748f72ebae26c7ceed035af67084'
+    'Authorization': 'Token ' + os.environ['TOKEN']
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
@@ -236,7 +233,6 @@ def getAllQRcodeId():
             ids.append(dict['id'])
             urls.append(dict['url'])
             markdown_ids.append(dict["campaign"]["markdown_card"])
-            # print(dict['id'],dict['state'])
     
     dict = {
         "image_id": ids,
