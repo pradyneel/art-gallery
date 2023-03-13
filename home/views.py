@@ -41,37 +41,46 @@ def GenerateQRcode(markdown_card_id, name, template_id):
     url = "https://api.beaconstac.com/api/2.0/qrcodes/"
  
     payload = {
-    "name": name,
-    "organization": 26724,
-    "qr_type": 2,
-    "campaign": {
-        "content_type": 2,
-        "markdown_card": markdown_card_id
-    },
-    "location_enabled": False,
-    "attributes":{
-        "colorDark":template_design["colorDark"],
-        "margin": template_design["margin"],
-        "isVCard":False,
-        "frameText": name.title(),
-        "logoBackground": template_design["logoBackground"],
-        "logoImage":template_design["logoImage"],
-        "logoScale":template_design["logoScale"],
-        "frameColor":template_design["frameColor"],
-        "frameStyle":template_design["frameStyle"],
-        "logoMargin":template_design["logoMargin"],
-        "dataPattern": template_design["dataPattern"],
-        "eyeBallShape": template_design["eyeBallShape"],
-        "gradientType": template_design["gradientType"],
-        "eyeFrameColor": template_design["eyeFrameColor"],
-        "eyeFrameShape": template_design["eyeFrameShape"],
-        "frameTextColor": template_design["frameTextColor"],
-        "backgroundColor": template_design["backgroundColor"],
-        "eyeBallColor": template_design["eyeBallColor"],
-        "dotScale": template_design["dotScale"],
-        "colorLight": template_design["colorLight"]
-    }
-
+        "name": name,
+        "organization": 26724,
+        "qr_type": 2,
+        "tag_data": [
+            {
+                "id": 30102,
+                "name": "Art Gallery",
+                "color": "#eb5a47"
+            }
+        ],
+        "campaign": {
+            "content_type": 2,
+            "markdown_card": markdown_card_id
+        },
+        "location_enabled": False,
+        "attributes":{
+            "colorDark":template_design["colorDark"],
+            "margin": template_design["margin"],
+            "isVCard":False,
+            "frameText": name.title(),
+            "logoBackground": template_design["logoBackground"],
+            "logoImage":template_design["logoImage"],
+            "logoScale":template_design["logoScale"],
+            "frameColor":template_design["frameColor"],
+            "frameStyle":template_design["frameStyle"],
+            "logoMargin":template_design["logoMargin"],
+            "dataPattern": template_design["dataPattern"],
+            "eyeBallShape": template_design["eyeBallShape"],
+            "gradientType": template_design["gradientType"],
+            "eyeFrameColor": template_design["eyeFrameColor"],
+            "eyeFrameShape": template_design["eyeFrameShape"],
+            "frameTextColor": template_design["frameTextColor"],
+            "backgroundColor": template_design["backgroundColor"],
+            "eyeBallColor": template_design["eyeBallColor"],
+            "dotScale": template_design["dotScale"],
+            "colorLight": template_design["colorLight"]
+        },
+        "tags": [
+            30102
+        ]
     }
 
     headers = {
@@ -213,7 +222,7 @@ def getQRcode_url(images_id):
 
 # Get all QR code ids
 def getAllQRcodeId():
-    url = "https://api.beaconstac.com/api/2.0/qrcodes/"
+    url = "https://appserver.beaconstac.com/api/2.0/qrcodes/?organization=26724&tags__name__in=Art Gallery&ordering=-updated&state=A"
 
     payload={}
     headers = {
@@ -228,11 +237,9 @@ def getAllQRcodeId():
     markdown_ids = []
 
     for dict in dictResponse['results']:
-        #  To get ID of only Active QR codes
-        if(dict['state'] == 'A'):
-            ids.append(dict['id'])
-            urls.append(dict['url'])
-            markdown_ids.append(dict["campaign"]["markdown_card"])
+        ids.append(dict['id'])
+        urls.append(dict['url'])
+        markdown_ids.append(dict["campaign"]["markdown_card"])
     
     dict = {
         "image_id": ids,
